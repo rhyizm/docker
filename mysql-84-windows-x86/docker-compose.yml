@@ -1,0 +1,18 @@
+# Windows x86_64 hosts using Linux containers
+services:
+  mysql:
+    image: mysql:8.4
+    platform: linux/amd64
+    container_name: mysql-84-windows-x86
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: QazxSw
+      MYSQL_DATABASE: drizzle
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql84-windows-x86-data:/var/lib/mysql
+
+volumes:
+  mysql84-windows-x86-data:
+    driver: local

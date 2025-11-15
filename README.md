@@ -22,18 +22,24 @@ To build this image, run:
 docker build -t py313-alpine:python3.13-alpine -f py313-alpine/Dockerfile py313-alpine
 ```
 
-## mysql-84
+## MySQL 8.4
 
-An Apple Silicon–ready MySQL 8.4 service configured for Drizzle.
+ホストに合わせて以下のどちらかを使ってください：
 
-To start it, run:
+- Apple Silicon/arm64: `mysql-84-arm64v8/docker-compose.yml`
+- Windows x86_64 (Linuxコンテナ): `mysql-84-windows-x86/docker-compose.yml`
+
+起動コマンド例：
 
 ```bash
-docker compose -f mysql-84/docker-compose.yml up -d
+docker compose -f mysql-84-arm64v8/docker-compose.yml up -d
+# または
+docker compose -f mysql-84-windows-x86/docker-compose.yml up -d
 ```
 
-- Connection string: `mysql://root:QazxSw@127.0.0.1:3306/mydb`
-- Create a new database (replace `newdb` as needed):
+接続例: `mysql://root:QazxSw@127.0.0.1:3306/drizzle`
+
+DB作成例（`newdb`は任意名に置換）：
 
 ```bash
 mysql -h 127.0.0.1 -P 3306 -u root -pQazxSw -e "CREATE DATABASE newdb;"

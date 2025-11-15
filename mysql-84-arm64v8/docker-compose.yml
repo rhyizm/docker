@@ -1,7 +1,7 @@
 services:
   mysql:
     image: arm64v8/mysql:8.4
-    container_name: mysql-84
+    container_name: mysql-84-arm64v8
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: QazxSw
@@ -9,8 +9,8 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - mysql84-data:/var/lib/mysql
+      - mysql84-arm64v8-data:/var/lib/mysql
 
 volumes:
-  mysql84-data:
+  mysql84-arm64v8-data:
     driver: local
