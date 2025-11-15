@@ -1,0 +1,10 @@
+{
+  "browser": {
+    "browserName": "chromium",
+    "launchOptions": {
+      "headless": true,
+      "args": ["--no-sandbox", "--disable-dev-shm-usage"]
+    }
+  },
+  "server": { "host": "0.0.0.0", "port": 8931 }
+}

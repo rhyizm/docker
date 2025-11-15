@@ -1,0 +1,16 @@
+services:
+  # Playwright MCP Server
+  playwright-mcp:
+    image: mcr.microsoft.com/playwright/mcp:latest
+    working_dir: /server
+    entrypoint: ["npx", "@playwright/mcp@latest"]
+    command: ["--host","0.0.0.0","--port","8931","--config","/server/playwright.config.json","--headless"]
+    ports:
+      - "8931:8931"
+    shm_size: "1g"
+    volumes:
+      - .:/server
+      - mcp_pw_cache:/root/.cache/ms-playwright
+
+volumes:
+  mcp_pw_cache:
