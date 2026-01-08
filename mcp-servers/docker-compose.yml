@@ -1,16 +1,48 @@
 services:
-  # Playwright MCP Server
+  # Playwright MCP Server (既存の設定 + 共有ボリューム)
   playwright-mcp:
     image: mcr.microsoft.com/playwright/mcp:latest
-    working_dir: /server
-    entrypoint: ["npx", "@playwright/mcp@latest"]
-    command: ["--host","0.0.0.0","--port","8931","--config","/server/playwright.config.json","--headless"]
+    restart: always
+    init: true
+    entrypoint: ["node"]
+    command:
+      - cli.js
+      - --host
+      - 0.0.0.0
+      - --port
+      - "8931"
+      - --config
+      - /server/playwright.config.json
+      - --headless
+      - --browser
+      - chromium
+      - --no-sandbox
+      - --allowed-hosts
+      - "*"
+      - --user-agent
+      - "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36"
     ports:
       - "8931:8931"
     shm_size: "1g"
     volumes:
       - .:/server
       - mcp_pw_cache:/root/.cache/ms-playwright
+      # ▼ 追加: 共有ドライブをコンテナ内の /shared_data にマウント
+      - mcp_shared_volume:/shared_data
+
+  filesystem-mcp:
+    image: mcp/filesystem:latest
+    restart: always
+    # stdio MCP をあとから docker exec でつなぎたい場合に便利
+    stdin_open: true
+    tty: true
+    volumes:
+      # Playwright と同じボリュームを同じパスにマウント
+      - mcp_shared_volume:/shared_data
+    # このディレクトリの下だけ操作可能にする
+    command: ["/shared_data"]
 
 volumes:
   mcp_pw_cache:
+  # ▼ 新規定義: コンテナ間で共有するためのボリューム
+  mcp_shared_volume:
